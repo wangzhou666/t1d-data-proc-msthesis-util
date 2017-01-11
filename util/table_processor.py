@@ -49,7 +49,7 @@ class Table(object):
     def __allow_attrs(self, wl_filename):
         assert isinstance(wl_filename, str)
         attrs = set()
-        with open(bl_filename, 'r') as f:
+        with open(wl_filename, 'r') as f:
             for row in f:
                 attr = row
                 attr = attr.strip('\n')
@@ -80,12 +80,12 @@ class Table(object):
             self.headers.pop(index)
             for d in self.data:
                 d.pop(index)
-        print "attr: ", attr_name, " is removed"
+        print "attr:", attr_name, "is removed"
 
     # write Table object to csv file
     def write_file(self, filename):
         assert isinstance(filename, str)
-        print "writing csv file" + filename + " ..."
+        print "writing csv file:", filename, "..."
         with open(filename, 'w') as f:
             amount = len(self.headers)
             i = 0
