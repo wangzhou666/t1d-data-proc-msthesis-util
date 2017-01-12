@@ -1,6 +1,6 @@
 clean:
 	rm data/csv/*
-	rm util/*.pyc
+	rm rulefit_data_utils/*.pyc
 	rm example/output/*
 
 run-example:

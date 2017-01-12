@@ -1,10 +1,6 @@
-import sys
-
-sys.path.append('util')
-
-import table_processor as tp
-import log_processor as lp
-import rule_processor as rp
+from rulefit_data_utils import table_processor as tp
+from rulefit_data_utils import log_processor as lp
+from rulefit_data_utils import rule_processor as rp
 
 ########## log processor ################
 
@@ -20,11 +16,15 @@ table_infec_episodes = logs2.report_odds_by_timestamp(timestamp='Inf Age Mos', c
 ########### table processor ##############
 
 # read csv to table object, can use black_list or white_list to specify acceptable features
-table1 = tp.Table(filename="data/csv/mp88_infectious_episodes_masked.csv")
+
+# allowing all attributes this time
+table1 = tp.Table(filename="data/csv/mp88_infectious_episodes_masked.csv") 
+# use black list to filter attributes
 table2 = tp.Table(filename="data/csv/mp88_baseline_variables_masked.csv", \
     black_list="example/tmp/example-black-list.txt")
+# use white list to filter attributes
 table3 = tp.Table(filename="data/csv/mp88_outcomes_longitudinal_mask.csv", \
-    white_list="example/tmp/example-white-list.txt")
+    white_list="example/tmp/example-white-list.txt") # use white list to filter attributes
 
 # remove rows whose first elements starts with '2'
 # can use this to select samples
@@ -49,11 +49,17 @@ table_joined.sort_by_attr(primary_key="Mask Id").write_file("example/output/exam
 ##############################
 
 table_feature = tp.Table(filename="example/output/example-processed-data.csv")
+# find labels by joining longitudinal table, because the "T1D" labels are there
+# use sort_by_attr to guarantee two table items are in the same order
 table_label = table_feature.join_by_attr(\
     tp.Table(filename="data/csv/mp88_outcomes_longitudinal_mask.csv"), \
-    key="Mask Id").sort_by_attr(primary_key="Mask Id").get_cols(cols=["T1D"])
+    key="Mask Id")\
+    .sort_by_attr(primary_key="Mask Id")\
+    .get_cols(cols=["T1D"])
 
-table_feature.remove_attr("Mask Id").write_file("example/output/example-features.csv")
+table_feature.sort_by_attr(primary_key="Mask Id")\
+    .remove_attr("Mask Id")\
+    .write_file("example/output/example-features.csv")
 table_label.write_file("example/output/example-labels.csv")
 
 print "then run get_rules.r with R, to get rules"

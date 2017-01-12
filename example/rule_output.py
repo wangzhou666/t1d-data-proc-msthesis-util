@@ -1,10 +1,5 @@
-import sys
-
-sys.path.append('util')
-
-import table_processor as tp
-import log_processor as lp
-import rule_processor as rp
+from rulefit_data_utils import table_processor as tp
+from rulefit_data_utils import rule_processor as rp
 
 ########## rule processor ##############
 
