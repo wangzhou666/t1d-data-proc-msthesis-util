@@ -81,6 +81,7 @@ class Table(object):
             for d in self.data:
                 d.pop(index)
         print "attr:", attr_name, "is removed"
+        return self
 
     # write Table object to csv file
     def write_file(self, filename):
@@ -131,6 +132,7 @@ class Table(object):
             secondary_index = self.headers.index(secondary_key)
             self.data = sorted(self.data, key=lambda d: (float(d[primary_index]) if self.__isNumber(d[primary_index]) else d[primary_index], \
                 float(d[secondary_index]) if self.__isNumber(d[secondary_index]) else d[secondary_index]))
+        return self
 
     # join two Table objects, by default, using "Mask Id" as join key,
     # it only join each key once, so please make sure key is unique,
@@ -172,7 +174,7 @@ class Table(object):
                     cache[entry_o[index_other]] = i
                 i += 1
             j += 1
-        print "joining...100%"
+        print "joining... 100%"
         print "joining complete"
         return Table(data=data, headers=headers)
 
@@ -186,6 +188,7 @@ class Table(object):
                 cnt += 1
                 self.data.pop(i)
         print str(cnt), " rows are removed"
+        return self
 
     def horizontal_join(self, other):
         assert len(self.headers) == len(other.headers)
@@ -219,6 +222,37 @@ class Table(object):
     # @returns number of attributes
     def get_cols_num(self):
         return len(self.headers)
+
+    # get selected columns
+    # @returns a new table object containing selected columns
+    def get_cols(self, cols=[]):
+        headers = cols[:]
+        data = [[] for x in xrange(0, len(self.data))]
+        for c in cols:
+            for x in xrange(0, len(self.data)):
+                data[x].append(self.get_element(attr=c, row=x))
+        return Table(headers=headers, data=data)
+
+    # get selected rows
+    # @returns a new table object containing selected rows
+    def get_rows(self, rows=[]):
+        headers = self.headers[:]
+        data = []
+        for r in rows:
+            assert isinstance(r, int)
+            assert r >= 0 and r < len(self.data) 
+            data.append(self.data[r])
+        return Table(headers=headers, data=data)
+
+    # rename an attribute
+    def rename_attr(self, oldname, newname):
+        assert oldname in self.headers
+        if oldname != newname:
+            if newname in self.headers:
+                print "cannot contains duplicate name in headers"
+            else:
+                self.headers[self.headers.index(oldname)] = newname
+        return self
 
     # @returns elements in @param row, and @param attr
     def get_element(self, attr=None, row=None):

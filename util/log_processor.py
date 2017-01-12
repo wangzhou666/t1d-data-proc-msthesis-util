@@ -17,7 +17,7 @@ class LogProcessor(object):
     # convert coninuous temporal data with log-like records(with timestamp) to single-line vectors
     # SUGGEST to apply to tables with "ab_zscores", "outcomes_longitudinal_mask", "tb_life_events"
     # @returns Table object with flatted table, may need to apply write_file() to csv output
-    def flat_by_timestamp(self, timestamp='Due_num', start=None, end=None, interval=None):
+    def flat_by_timestamp(self, timestamp='Due_num', start=None, end=None, interval=1):
         assert isinstance(timestamp, str)
         assert isinstance(start, int)
         assert isinstance(end, int)
@@ -52,7 +52,7 @@ class LogProcessor(object):
                     entry.append(logs.get_element(attr, start))
             res = res.horizontal_join(tp.Table(headers=res.headers[:], data=[entry]))
 
-        print "flatting...100%"
+        print "flatting... 100%"
         print "flatting complete"
         return res
 
@@ -73,7 +73,7 @@ class LogProcessor(object):
     # convert discret temporal data with log-like records(with timestamp) to single line vectors
     # SUGGEST to apply to table with "infectious_episodes_masked"
     # @returns Table object with report table, may need to apply write_file() to csv output
-    def report_odds_by_timestamp(self, timestamp='Inf Age Mos', category='Inf Epi Group', start=None, end=None, interval=None):
+    def report_odds_by_timestamp(self, timestamp='Inf Age Mos', category='Inf Epi Group', start=None, end=None, interval=1):
         assert isinstance(timestamp, str)
         assert isinstance(start, int)
         assert isinstance(end, int)
@@ -108,7 +108,7 @@ class LogProcessor(object):
                 entry[1+cat_time_attrs.index(category+'_'+categ+'_'+str(checkpoint))] = '1'
             res = res.horizontal_join(tp.Table(headers=res.headers[:], data=[entry]))
 
-        print "generating report...100%"
+        print "generating report... 100%"
         print "reporting odds complete"
         return res
 
