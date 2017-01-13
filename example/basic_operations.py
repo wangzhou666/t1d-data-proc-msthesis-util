@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append("/Users/zhouwang/Desktop/thesis-code")
+
 from rulefit_data_utils import table_processor as tp
 from rulefit_data_utils import log_processor as lp
 from rulefit_data_utils import rule_processor as rp

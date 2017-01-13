@@ -67,7 +67,7 @@ Returns new Table containing given columns from current Table.
 Returns new Table containing given rows from current Table.  
 * Table **remove_attr**(oldname: str, newname: str)  
 Rename a column, returns itself.  
-* str get_element(attr: str, row: int)  
+* str **get_element**(attr: str, row: int)  
 Returns elements in given location of the Table.  
 
 ### [log_processor](https://github.tamu.edu/Wangzhou123/rulefit-data-process-utilities/blob/master/rulefit_data_utils/log_processor.py)
@@ -107,6 +107,14 @@ Create a RuleProcessor based on rule description file generated from R package, 
 ##### Methods
 * Table **get_rule_output**(data_table: Table, output_filename: str/None)  
 Compute rules output given current rules, and *data_table* containing samples and features. Write to csv file if *out_filename* is not None, returns new Table with rule outputs.  
+* list[Rule] **group_rules_by_hashing**(func: Function[hashable/list[hashable]])  
+Group rules by user-defined hash function that returns either a hashable or list of hashable(which results in overlapped groups), return a list of grouped rules.  
+* void **output_group_config**(filename_index: str, filename_groupid: str)  
+Output rule groups information for SLEP package in MATLAB  
+* RuleProcessor **remove_rules_by_condition**(func: Function[Boolean])  
+Remove rules satisfying user-defined criteria, return RuleProcessor itself.  
+* RuleProcessor **add_rule_by_text**(text: str)
+Add a new rule to current rule processor, return it self.
 
 ### [xlsx2csv_converter](https://github.tamu.edu/Wangzhou123/rulefit-data-process-utilities/blob/master/rulefit_data_utils/xlsx2csv_converter.py)
 
